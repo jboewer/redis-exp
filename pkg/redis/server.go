@@ -34,7 +34,6 @@ type Server struct {
 }
 
 func NewServer() *Server {
-
 	mux := &serveMux{
 		handlers: make(map[string]handleFunc),
 	}
@@ -99,20 +98,30 @@ func (s *Server) handleConnection(conn net.Conn) error {
 	}
 }
 
-func parseCommand(v resp.Array) (command, error) {
-	var cmd command
+func parseCommand(arr resp.Array) (command, error) {
+	if len(arr.Values) == 0 {
+		return command{}, fmt.Errorf("empty command")
+	}
+
+	bs, ok := arr.Values[0].(resp.BulkString)
+	if !ok {
+		return command{}, fmt.Errorf("expected bulk string for command name, got %v\n", arr.Values[0].Type())
+	}
+
+	cmd := command{
+		name: bs.Value,
+		args: make([]string, 0, len(arr.Values)-1),
+	}
 
 	// All values must be bulk strings
-	for _, v := range v.Values {
+	for _, v := range arr.Values[1:] {
 		bs, ok := v.(resp.BulkString)
 		if !ok {
-			return cmd, fmt.Errorf("expected bulk string, got %v\n", v.Type())
+			return command{}, fmt.Errorf("expected bulk string, got %v\n", v.Type())
 		}
 
 		cmd.args = append(cmd.args, bs.Value)
 	}
-
-	cmd.name = cmd.args[0]
 
 	return cmd, nil
 }

@@ -6,7 +6,14 @@ import (
 )
 
 func cmdPing(conn net.Conn, cmd command) {
-	s, err := resp.NewSimpleString("PONG")
+	var answer string
+	if len(cmd.args) > 0 {
+		answer = cmd.args[0]
+	} else {
+		answer = "PONG"
+	}
+
+	s, err := resp.NewSimpleString(answer)
 	if err != nil {
 		return
 	}

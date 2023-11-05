@@ -25,9 +25,7 @@ func (r *Reader) ReadValue() (Value, error) {
 		return nil, err
 	}
 
-	valueType := TypeIdentifier(typeByte)
-
-	switch valueType {
+	switch TypeIdentifier(typeByte) {
 	case TypeIdentifierSimpleString:
 		l, err := r.readLine()
 		if err != nil {
@@ -66,7 +64,7 @@ func (r *Reader) ReadValue() (Value, error) {
 		}
 		return NewArray(values), nil
 	default:
-		return nil, fmt.Errorf("unknown type identifier: %v", valueType)
+		return nil, fmt.Errorf("unknown type identifier: %v", typeByte)
 	}
 }
 
