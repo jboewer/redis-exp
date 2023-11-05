@@ -6,13 +6,13 @@ import "fmt"
 type Array struct {
 	data   []byte
 	Length int
-	Value  []Value
+	Values []Value
 }
 
-func NewArray(values []Value) (Array, error) {
+func NewArray(values []Value) Array {
 	var arr Array
 
-	arr.Value = values
+	arr.Values = values
 	arr.Length = len(values)
 
 	data := fmt.Sprintf("*%d%s", arr.Length, crlf)
@@ -23,7 +23,7 @@ func NewArray(values []Value) (Array, error) {
 
 	arr.data = []byte(data)
 
-	return arr, nil
+	return arr
 }
 
 func (a Array) Type() TypeIdentifier {

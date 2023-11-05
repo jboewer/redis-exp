@@ -26,7 +26,6 @@ func (r *Reader) ReadValue() (Value, error) {
 	}
 
 	valueType := TypeIdentifier(typeByte)
-	fmt.Printf("type identifier: %v\n", valueType)
 
 	switch valueType {
 	case TypeIdentifierSimpleString:
@@ -35,6 +34,12 @@ func (r *Reader) ReadValue() (Value, error) {
 			return nil, err
 		}
 		return NewSimpleString(string(l))
+	case TypeIdentifierSimpleError:
+		l, err := r.readLine()
+		if err != nil {
+			return nil, err
+		}
+		return NewSimpleError(string(l))
 	case TypeIdentifierBulkString:
 		length, err := r.readInt()
 		if err != nil {
@@ -46,7 +51,7 @@ func (r *Reader) ReadValue() (Value, error) {
 			return nil, err
 		}
 
-		return NewBulkString(string(data[:length])) // Strip CRLF
+		return NewBulkString(string(data[:length])), nil // Strip CRLF
 	case TypeIdentifierArray:
 		length, err := r.readInt()
 		if err != nil {
@@ -59,7 +64,7 @@ func (r *Reader) ReadValue() (Value, error) {
 				return nil, err
 			}
 		}
-		return NewArray(values)
+		return NewArray(values), nil
 	default:
 		return nil, fmt.Errorf("unknown type identifier: %v", valueType)
 	}

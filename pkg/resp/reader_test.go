@@ -68,7 +68,7 @@ func TestReader_ReadValue(t *testing.T) {
 			want: Array{
 				data:   []byte("*0\r\n"),
 				Length: 0,
-				Value:  []Value{},
+				Values: []Value{},
 			},
 		},
 		{
@@ -76,7 +76,7 @@ func TestReader_ReadValue(t *testing.T) {
 			want: Array{
 				data:   []byte("*2\r\n$3\r\nfoo\r\n$3\r\nbar\r\n"),
 				Length: 2,
-				Value: []Value{
+				Values: []Value{
 					BulkString{
 						data:   []byte("$3\r\nfoo\r\n"),
 						Length: 3,

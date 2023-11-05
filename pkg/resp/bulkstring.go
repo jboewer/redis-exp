@@ -34,14 +34,14 @@ func parseBulkString(data []byte) (BulkString, error) {
 	return bs, nil
 }
 
-func NewBulkString(s string) (BulkString, error) {
+func NewBulkString(s string) BulkString {
 	data := []byte(fmt.Sprintf("$%d%s%s%s", len(s), crlf, s, crlf))
 
 	return BulkString{
 		data:   data,
 		Length: len(s),
 		Value:  s,
-	}, nil
+	}
 }
 
 func (b BulkString) Type() TypeIdentifier {

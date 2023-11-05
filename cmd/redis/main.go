@@ -13,7 +13,7 @@ var FlagPort = flag.String("port", "6379", "Port to listen to")
 func main() {
 	flag.Parse()
 
-	server := redis.Server{}
+	server := redis.NewServer()
 
 	log.Fatal(server.ListenAndServe(net.JoinHostPort(*FlagHost, *FlagPort)))
 }
