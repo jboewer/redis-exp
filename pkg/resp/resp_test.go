@@ -78,7 +78,7 @@ func TestNewBulkString(t *testing.T) {
 	}
 
 	for _, tc := range tests {
-		got, _ := NewBulkString(tc.data)
+		got := NewBulkString(tc.data)
 		assert.Equal(t, tc.want.Length, got.Length)
 		assert.Equal(t, tc.want.Value, got.Value)
 		assert.Equal(t, tc.want.data, got.data)
